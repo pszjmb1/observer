@@ -1,5 +1,7 @@
 package uk.ac.horizon.observer;
 
+import java.net.MalformedURLException;
+
 import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
 import android.app.Activity;
@@ -14,6 +16,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 
 /**
  * A list fragment representing a list of Places. This fragment also supports
@@ -55,6 +62,14 @@ public class PlacesFragment extends ListFragment {
 	private static boolean startedTimer = false;
 
 	/**
+	 * For data handling
+	 */
+	private MobileServiceClient mClient;
+	private Activity getContext() {
+		return this.getActivity();
+	}
+
+	/**
 	 * A callback interface that all activities containing this fragment must
 	 * implement. This mechanism allows activities to be notified of item
 	 * selections.
@@ -92,6 +107,16 @@ public class PlacesFragment extends ListFragment {
 
 		// For action bar
 		setHasOptionsMenu(true);
+
+		// For Data handling
+		try {
+			mClient = new MobileServiceClient(
+					"https://wayward.azure-mobile.net/",
+					"roguTRplNWWHyuhEhMhOIeLENGQBLB58", this.getActivity());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -146,8 +171,8 @@ public class PlacesFragment extends ListFragment {
 	}
 
 	/**
-	 * Notify the active callbacks interface (the activity, if the fragment is attached to one) 
-	 * that an item has been selected.
+	 * Notify the active callbacks interface (the activity, if the fragment is
+	 * attached to one) that an item has been selected.
 	 */
 	@Override
 	public void onListItemClick(ListView listView, View view, int position,
@@ -198,40 +223,40 @@ public class PlacesFragment extends ListFragment {
 	 */
 	private class ActionTimer {
 		public ActionTimer() {
-			if(!startedTimer){
+			if (!startedTimer) {
 				startedTimer = true;
 				startTimer();
 			}
 		}
-		
-		private void startTimer(){
+
+		private void startTimer() {
 			CountDownTimer timer = new CountDownTimer(DURATION, INTERVAL) {
 
 				/**
 				 * When the countdown finishes: 
-				 *  - Todo: Store the click data 
-				 * 	- increment the observation counter 
-				 * 	- reset the interface
-				 *  - Restart the countdown
+				 * - Todo: Store the click data 
+				 * - increment the observation counter 
+				 * - reset the interface 
+				 * - Restart the countdown
 				 */
 				@Override
 				public void onFinish() {
+					dummyDataHandler();
 					observationCount++;
 					reset();
 					startTimer();
 				}
 
 				/**
-				 * Update the actionbar text on each tick so the user knows how much 
-				 * time is remaining in current observation
+				 * Update the actionbar text on each tick so the user knows how
+				 * much time is remaining in current observation
 				 */
 				@Override
 				public void onTick(long millisecondsLeft) {
 					long numSec = millisecondsLeft / 1000;
-					timerText.setText("" + numSec
-							+ " second" + ((1 == numSec) ? "" : "s") + 
-							" remaining for observation "
-							+ observationCount);
+					timerText.setText("" + numSec + " second"
+							+ ((1 == numSec) ? "" : "s")
+							+ " remaining for observation " + observationCount);
 
 				}
 			};
@@ -240,7 +265,8 @@ public class PlacesFragment extends ListFragment {
 		}
 
 		/**
-		 * Reset observer by clearing the selections from the places and tasks fragments
+		 * Reset observer by clearing the selections from the places and tasks
+		 * fragments
 		 */
 		private void reset() {
 			final ListView lv = getListView();
@@ -250,5 +276,40 @@ public class PlacesFragment extends ListFragment {
 			}
 			Places.setCurrentPlace(-1);
 		}
+
+		private void dummyDataHandler() {
+			Item item = new Item();
+			item.Text = "Awesome item";
+			mClient.getTable(Item.class).insert(item,
+				new TableOperationCallback<Item>() {
+					public void onCompleted(Item entity,
+							Exception exception,
+							ServiceFilterResponse response) {
+						if (exception == null) { 
+							// Insert succeeded
+							Toast.makeText(getContext(),
+									"Insert succeeded",
+									Toast.LENGTH_LONG).show();
+						} else {
+							// Insert failed
+							Toast.makeText(getContext(),
+									"Insert failed",
+									Toast.LENGTH_LONG).show();
+						}
+					}
+				}
+			);
+		}
+	}
+
+	/**
+	 * Data handling test
+	 * 
+	 * @author Jesse
+	 * 
+	 */
+	private class Item {
+		public String Id;
+		public String Text;
 	}
 }

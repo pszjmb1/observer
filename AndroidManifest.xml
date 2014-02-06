@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="18" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -30,6 +31,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlaceListActivity" />
         </activity>
-    </application>
 
+    </application>
 </manifest>
