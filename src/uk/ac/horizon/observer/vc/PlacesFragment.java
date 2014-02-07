@@ -276,6 +276,7 @@ public class PlacesFragment extends ListFragment {
 				lv.setItemChecked(i, false);
 			}
 			Places.setCurrentPlace(-1);
+			mCallbacks.onItemSelected(null);
 		}
 
 		private void dummyDataHandler() {
