@@ -1,32 +1,36 @@
 package uk.ac.horizon.observer.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Stack;
 
 /**
  * An observable place
  * @author Jesse
  */
-public class Place {
-	private String name;
-	private List<Task> tasks = new ArrayList<Task>();
+public class Place extends Observation {
+	private Stack<Task> tasks = new Stack<Task>();
 	
-	public Place(String name, List<Task> tasks){
-		this.name = name;
+	public Place(String name, Stack<Task> tasks){
+		super(name);
 		this.tasks = tasks;
 	}
 	
-	public String getName(){
-		return name;
-	}
-	
-	public List<Task> getTasks(){
+	public Stack<Task> getTasks(){
 		return tasks;
 	}
 	
-	public String toString(){
-		return name;
+	public void pushTask(Task task){
+		tasks.push(task);
+	}
+	
+	public Task popTask(){
+		return tasks.pop();
+	}
+	
+	public Task peekTask(){
+		return tasks.peek();
+	}
+	
+	public int size(){
+		return tasks.size();
 	}
 }

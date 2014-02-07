@@ -1,10 +1,13 @@
 package uk.ac.horizon.observer.vc;
 
 import java.net.MalformedURLException;
+import java.util.Stack;
 
 import uk.ac.horizon.observer.R;
+import uk.ac.horizon.observer.model.Observations;
 import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
+import uk.ac.horizon.observer.model.Task;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -57,15 +60,17 @@ public class PlacesFragment extends ListFragment {
 	 * For the timer in the action bar
 	 */
 	private static TextView timerText;
-	private static final long DURATION = 30000;
+	private static final long DURATION = 10000;
 	private static final long INTERVAL = 1000;
 	private static int observationCount = 1;
 	private static boolean startedTimer = false;
+	private static ActionTimer at = null;
 
 	/**
 	 * For data handling
 	 */
 	private MobileServiceClient mClient;
+
 	private Activity getContext() {
 		return this.getActivity();
 	}
@@ -109,6 +114,9 @@ public class PlacesFragment extends ListFragment {
 		// For action bar
 		setHasOptionsMenu(true);
 
+		// Retain this fragment across configuration changes.
+		setRetainInstance(true);
+
 		// For Data handling
 		try {
 			mClient = new MobileServiceClient(
@@ -135,7 +143,19 @@ public class PlacesFragment extends ListFragment {
 		MenuItem timerItem = menu.findItem(R.id.break_timer);
 		timerText = (TextView) MenuItemCompat.getActionView(timerItem);
 		timerText.setPadding(10, 0, 10, 0);
-		new ActionTimer();
+		at = new ActionTimer();
+	}
+	
+	@Override
+	public void onPause(){
+	    super.onPause();
+		at.cancel();
+	}
+	
+	@Override
+	public void onResume() {
+	    super.onResume(); 
+		at = new ActionTimer();
 	}
 
 	@Override
@@ -182,6 +202,12 @@ public class PlacesFragment extends ListFragment {
 
 		mCallbacks.onItemSelected("" + position);
 		Places.setCurrentPlace(position);
+		Place aplace = new Place(Places.getPlaces().get(position).getName(), 
+			new Stack<Task>());
+		Observations.push(aplace);
+		Toast.makeText(this.getActivity(),
+				String.valueOf("Number of observations: " + Observations.numObservations()),
+				Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -223,26 +249,36 @@ public class PlacesFragment extends ListFragment {
 	 * @author Jesse
 	 */
 	private class ActionTimer {
+		private CountDownTimer timer;
 		public ActionTimer() {
 			if (!startedTimer) {
 				startedTimer = true;
 				startTimer();
 			}
 		}
+		
+		public void cancel(){
+			if(null != this.timer){
+				this.timer.cancel();
+			}
+		}
 
 		private void startTimer() {
-			CountDownTimer timer = new CountDownTimer(DURATION, INTERVAL) {
+			Observations.reset();
+
+			Toast.makeText(getContext(),
+					String.valueOf("Number of observations: " + Observations.numObservations()),
+					Toast.LENGTH_LONG).show();
+			timer = new CountDownTimer(DURATION, INTERVAL) {
 
 				/**
-				 * When the countdown finishes: 
-				 * - Todo: Store the click data 
-				 * - increment the observation counter 
-				 * - reset the interface 
-				 * - Restart the countdown
+				 * When the countdown finishes: - Todo: Store the click data -
+				 * increment the observation counter - reset the interface -
+				 * Restart the countdown
 				 */
 				@Override
 				public void onFinish() {
-					dummyDataHandler();
+					//dummyDataHandler();
 					observationCount++;
 					reset();
 					startTimer();
@@ -270,13 +306,17 @@ public class PlacesFragment extends ListFragment {
 		 * fragments
 		 */
 		private void reset() {
-			final ListView lv = getListView();
-			lv.clearChoices();
-			for (int i = 0; i < lv.getChildCount(); i++) {
-				lv.setItemChecked(i, false);
+			try{
+				ListView lv = getListView();
+				lv.clearChoices();
+				for (int i = 0; i < lv.getChildCount(); i++) {
+					lv.setItemChecked(i, false);
+				}
+				Places.setCurrentPlace(-1);
+				mCallbacks.onItemSelected(null);
+			}catch(IllegalStateException e){
+				// Do nothing
 			}
-			Places.setCurrentPlace(-1);
-			mCallbacks.onItemSelected(null);
 		}
 
 		private void dummyDataHandler() {
@@ -287,20 +327,18 @@ public class PlacesFragment extends ListFragment {
 					public void onCompleted(Item entity,
 							Exception exception,
 							ServiceFilterResponse response) {
-						if (exception == null) { 
+						if (exception == null) {
 							// Insert succeeded
 							Toast.makeText(getContext(),
-									"Insert succeeded",
-									Toast.LENGTH_LONG).show();
+									"Insert succeeded", Toast.LENGTH_LONG)
+									.show();
 						} else {
 							// Insert failed
-							Toast.makeText(getContext(),
-									"Insert failed",
+							Toast.makeText(getContext(), "Insert failed",
 									Toast.LENGTH_LONG).show();
 						}
 					}
-				}
-			);
+				});
 		}
 	}
 

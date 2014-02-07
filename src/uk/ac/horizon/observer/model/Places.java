@@ -2,6 +2,7 @@ package uk.ac.horizon.observer.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Singleton list of Places
@@ -45,7 +46,7 @@ public class Places {
 	
 	private static void init(){
 		places =  new ArrayList<Place>();
-		List<Task> main = new ArrayList<Task>();
+		Stack<Task> main = new Stack<Task>();
 		main.add(new Task("Walking/Running"));
 		main.add(new Task("Talking Face-to-face"));
 		main.add(new Task("Talking on Phone"));
@@ -58,7 +59,7 @@ public class Places {
 		main.add(new Task("No Observable Task (thinking/relaxing)"));
 		main.add(new Task("Interrupted"));
 		main.add(new Task("Other"));
-		List<Task> empty = new ArrayList<Task>();
+		Stack<Task> empty = new Stack<Task>();
 
 		places.add(new Place("In Transit – Within Ward", main));
 		places.add(new Place("In Transit – Between Wards", main));

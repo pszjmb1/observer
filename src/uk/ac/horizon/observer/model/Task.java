@@ -5,19 +5,8 @@ package uk.ac.horizon.observer.model;
  * @author Jesse
  *
  */
-public class Task {
-	private String name;
-
+public class Task extends Observation {
 	public Task(String name) {
-		this.name = name;
-	}
-	
-	public String getName(){
-		return name;
-	}
-
-	@Override
-	public String toString() {
-		return name;
+		super(name);
 	}
 }
