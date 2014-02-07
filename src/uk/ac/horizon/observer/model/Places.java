@@ -32,6 +32,13 @@ public class Places {
 	public static void setCurrentPlace(int i){
 		currentPlace = i;
 	}	
+	public static String getCurrentPlaceName(){
+		if(null != places && currentPlace > -1){
+			return places.get(currentPlace).getName();
+		} else{
+			return null;
+		}
+	}	
 	
 	private Places(){
 	}

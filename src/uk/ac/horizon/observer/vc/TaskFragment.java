@@ -75,12 +75,19 @@ public class TaskFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 		
 		if(null != myTasks){
-			ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(
+			if(myTasks.isEmpty()){
+				Toast.makeText(this.getActivity(),
+						String.valueOf("No tasks to select for " + Places.getCurrentPlaceName()),
+						Toast.LENGTH_LONG).show();			
+					}
+			else{	
+				ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(
 					this.getActivity(),
 					android.R.layout.simple_list_item_activated_1, myTasks);
 			setListAdapter(adapter);
 			getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		}
+			}
+		} 
 	}
 
 	/**
@@ -90,7 +97,7 @@ public class TaskFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		Toast.makeText(this.getActivity(),
-				String.valueOf(getListView().getCheckedItemCount()),
+				String.valueOf("Number of tasks: " + getListView().getCheckedItemCount()),
 				Toast.LENGTH_LONG).show();
 	}
 }
