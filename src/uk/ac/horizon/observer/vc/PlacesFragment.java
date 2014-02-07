@@ -266,9 +266,12 @@ public class PlacesFragment extends ListFragment {
 		private void startTimer() {
 			Observations.reset();
 
-			Toast.makeText(getContext(),
+			try{Toast.makeText(getContext(),
 					String.valueOf("Number of observations: " + Observations.numObservations()),
 					Toast.LENGTH_LONG).show();
+			}catch(NullPointerException e){
+				//ignore
+			}
 			timer = new CountDownTimer(DURATION, INTERVAL) {
 
 				/**
