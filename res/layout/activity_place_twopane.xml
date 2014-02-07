@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/place_list"
-        android:name="uk.ac.horizon.observer.PlacesFragment"
+        android:name="uk.ac.horizon.observer.vc.PlacesFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

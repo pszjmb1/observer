@@ -1,5 +1,6 @@
-package uk.ac.horizon.observer;
+package uk.ac.horizon.observer.vc;
 
+import uk.ac.horizon.observer.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

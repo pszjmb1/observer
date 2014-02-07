@@ -1,7 +1,8 @@
-package uk.ac.horizon.observer;
+package uk.ac.horizon.observer.vc;
 
 import java.net.MalformedURLException;
 
+import uk.ac.horizon.observer.R;
 import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
 import android.app.Activity;

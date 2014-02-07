@@ -1,4 +1,4 @@
-package uk.ac.horizon.observer;
+package uk.ac.horizon.observer.vc;
 
 import java.util.List;
 
