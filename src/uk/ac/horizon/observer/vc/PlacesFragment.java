@@ -249,7 +249,7 @@ public class PlacesFragment extends ListFragment {
 	 * @author Jesse
 	 */
 	private class ActionTimer {
-		private CountDownTimer timer;
+		private CountDownTimer timer = null;
 		public ActionTimer() {
 			if (!startedTimer) {
 				startedTimer = true;
@@ -271,6 +271,9 @@ public class PlacesFragment extends ListFragment {
 					Toast.LENGTH_LONG).show();
 			}catch(NullPointerException e){
 				//ignore
+			}
+			if(null != timer){
+				timer.cancel();
 			}
 			timer = new CountDownTimer(DURATION, INTERVAL) {
 
