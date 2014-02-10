@@ -143,19 +143,42 @@ public class PlacesFragment extends ListFragment {
 		MenuItem timerItem = menu.findItem(R.id.break_timer);
 		timerText = (TextView) MenuItemCompat.getActionView(timerItem);
 		timerText.setPadding(10, 0, 10, 0);
-		at = new ActionTimer();
+		//at = new ActionTimer();
 	}
+
+    /**
+     * The system calls this method When the user presses one of the action buttons 
+     * or another item in the action overflow. 
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_start:
+            	actionStart();
+                return true;
+            case R.id.action_stop:
+            	actionStop();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    private void actionStart() {
+    	at = new ActionTimer();
+        Toast.makeText(getContext(), "Started Observer", Toast.LENGTH_SHORT).show();
+    }
+    
+    private void actionStop() {
+		at.cancel();
+        Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT).show();
+    }
 	
 	@Override
 	public void onPause(){
 	    super.onPause();
 		at.cancel();
-	}
-	
-	@Override
-	public void onResume() {
-	    super.onResume(); 
-		at = new ActionTimer();
 	}
 
 	@Override
@@ -257,12 +280,14 @@ public class PlacesFragment extends ListFragment {
 		public void cancel(){
 			if(null != this.timer){
 				this.timer.cancel();
+				startedTimer = false;
+				this.timer = null;
 			}
 		}
 
 		private void startTimer() {
 			if(null != timer){
-				timer.cancel();
+				cancel();
 			}
 			Places.setCurrentBin(new Date().getTime());
 			timer = new CountDownTimer(DURATION, INTERVAL) {
