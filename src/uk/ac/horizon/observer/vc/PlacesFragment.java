@@ -1,6 +1,7 @@
 package uk.ac.horizon.observer.vc;
 
 import java.net.MalformedURLException;
+import java.util.Date;
 import java.util.Stack;
 
 import uk.ac.horizon.observer.R;
@@ -201,7 +202,7 @@ public class PlacesFragment extends ListFragment {
 
 		mCallbacks.onItemSelected("" + position);
 		Places.setCurrentPlace(position);
-		Place aplace = new Place(Places.getPlaces().get(position).getName(), 
+		Place aplace = new Place(Places.getCurrentPlaceName(), 
 			new Stack<Task>());
 	}
 
@@ -245,6 +246,7 @@ public class PlacesFragment extends ListFragment {
 	 */
 	private class ActionTimer {
 		private CountDownTimer timer = null;
+		
 		public ActionTimer() {
 			if (!startedTimer) {
 				startedTimer = true;
@@ -262,6 +264,7 @@ public class PlacesFragment extends ListFragment {
 			if(null != timer){
 				timer.cancel();
 			}
+			Places.setCurrentBin(new Date().getTime());
 			timer = new CountDownTimer(DURATION, INTERVAL) {
 
 				/**

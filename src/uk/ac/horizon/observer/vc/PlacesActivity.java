@@ -1,7 +1,9 @@
 package uk.ac.horizon.observer.vc;
 
 import uk.ac.horizon.observer.R;
+import uk.ac.horizon.observer.model.Observation;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -46,6 +48,7 @@ public class PlacesActivity extends FragmentActivity implements
 			((PlacesFragment) getSupportFragmentManager().findFragmentById(
 					R.id.place_list)).setActivateOnItemClick(true);
 		}
+		Observation.initDB(this);
 	}
 
 	/**

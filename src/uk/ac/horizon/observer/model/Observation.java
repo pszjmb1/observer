@@ -17,10 +17,14 @@ import android.util.Log;
  */
 public abstract class Observation {
 	private String name;
-	private Date observationTime = null;
+	private String type;
+	private Date observationTime = new Date();
+	// The id of the last inserted observation; -2 means the value has not been set
+	protected static long lastobs = -2;		
 
-	public Observation(String name) {
+	public Observation(String name, String type) {
 		this.name = name;
+		this.type = type;
 	}
 
 	public String toString() {
@@ -30,22 +34,15 @@ public abstract class Observation {
 	public String getName() {
 		return name;
 	}
+	
+	public String getType(){
+		return type;
+	}
 
 	public Date getObservationTime() {
 		return observationTime;
 	}
 
-	/**
-	 * ObservationTime may only be set once.
-	 * 
-	 * @param observationTime
-	 */
-	public void setObservationTime(Date observationTime) {
-		if (null == observationTime) {
-			this.observationTime = observationTime;
-		}
-	}
-	
 	public static void initDB(Context context){
 		ObservationDBHelper.getInstance(context).onCreate(
 			ObservationDBHelper.getInstance(context).getDb());
@@ -55,22 +52,32 @@ public abstract class Observation {
 	 * Inserts an observation into the database
 	 * @param context
 	 */
-	public void addObservation(Context context){
+	public long addObservation(Context context){
 		// Create a new map of values, where column names are the keys
 		ContentValues values = new ContentValues();
 		
 		values.put(ObservationDBHelper.ObservationColumns.
-				COLUMN_NAME_OBS_TIME, new Date().getTime());
+				COLUMN_NAME_OBS_TIME, this.observationTime.getTime());
 		values.put(ObservationDBHelper.ObservationColumns.
-				COLUMN_NAME_OBS_NAME, "abc");
+				COLUMN_NAME_OBS_NAME, this.name);
 		values.put(ObservationDBHelper.ObservationColumns.
-				COLUMN_NAME_OBS_TYPE, 45);
-
+				COLUMN_NAME_OBS_TYPE, type);
+		
+		lastobs = ObservationDBHelper.getInstance(context).getDb().
+				insert(ObservationDBHelper.ObservationColumns.TABLE_NAME, 
+						null, values);
 		// Log the insertion of the new row
-		Log.i(this.getClass().getName(), ""+
-				ObservationDBHelper.getInstance(context).getDb().
-					insert(ObservationDBHelper.ObservationColumns.TABLE_NAME, 
-							null, values), null);
+		Log.i(this.getClass().getName(), ""+ lastobs, null);
+		return lastobs;
+	}
+
+	/**
+	 * Note a -2 means this value is not set and a -1 means an 
+	 * error occured in the last insertion
+	 * @return the id of the last insertion
+	 */
+	public static long getLastObs(){
+		return lastobs;
 	}
 
 	/**
@@ -134,7 +141,7 @@ public abstract class Observation {
 				+ ObservationColumns.COLUMN_NAME_RELATED_OBS_TIME + " INTEGER" + SEP
 				+ ObservationColumns.COLUMN_NAME_RELATED_OBS_NAME + " TEXT" + SEP
 				+ " PRIMARY KEY (" + ObservationColumns.COLUMN_NAME_OBS_TIME
-				+ SEP + ObservationColumns.COLUMN_NAME_OBS_NAME + SEP + "))";
+				+ SEP + ObservationColumns.COLUMN_NAME_OBS_NAME + "))";
 
 		private static final String SQL_DELETE_CONFIG = "DROP TABLE IF EXISTS "
 				+ ObservationColumns.TABLE_NAME;
@@ -144,7 +151,7 @@ public abstract class Observation {
 		 * @author Jesse
 		 * 
 		 */
-		private static abstract class ObservationColumns implements BaseColumns {
+		protected static abstract class ObservationColumns implements BaseColumns {
 			public static final String TABLE_NAME = "Observations";
 			public static final String COLUMN_NAME_OBS_TIME = "obs_time";
 			public static final String COLUMN_NAME_OBS_NAME = "obs_name";

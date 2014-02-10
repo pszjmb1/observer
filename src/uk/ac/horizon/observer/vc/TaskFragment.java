@@ -5,6 +5,7 @@ import java.util.List;
 
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Task;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -95,5 +96,8 @@ public class TaskFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
+		Task tmp = myTasks.get(position);
+		Task task = new Task(tmp.getName(), Places.getCurrentPlace());
+		task.addObservation(this.getActivity());
 	}
 }

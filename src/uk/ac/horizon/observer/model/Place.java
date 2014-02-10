@@ -10,7 +10,7 @@ public class Place extends Observation {
 	private Stack<Task> tasks = new Stack<Task>();
 	
 	public Place(String name, Stack<Task> tasks){
-		super(name);
+		super(name, "place");
 		this.tasks = tasks;
 	}
 	

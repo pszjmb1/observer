@@ -12,6 +12,7 @@ import java.util.Stack;
 public class Places {
 	private static List<Place> places = null;
 	private static int currentPlace = -1;
+	private static long currentBin;
 	public static List<Place> getPlaces(){
 		if(null == places){
 			init();
@@ -40,6 +41,19 @@ public class Places {
 			return null;
 		}
 	}	
+	public static Place getCurrentPlace(){
+		if(null != places && currentPlace > -1){
+			return places.get(currentPlace);
+		} else{
+			return null;
+		}
+	}	
+	public static long getCurrentBin(){
+		return currentBin;
+	}	
+	public static void setCurrentBin(long binIn){
+		currentBin = binIn;
+	}
 	
 	private Places(){
 	}
