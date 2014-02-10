@@ -3,7 +3,6 @@ package uk.ac.horizon.observer.vc;
 import java.util.EmptyStackException;
 import java.util.List;
 
-import uk.ac.horizon.observer.model.Observations;
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Task;
 import android.os.Bundle;
@@ -96,17 +95,5 @@ public class TaskFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-
-		try{
-			Observations.peek().pushTask(myTasks.get(position));
-			
-		Toast.makeText(this.getActivity(),
-				//String.valueOf("Number of tasks: " + getListView().getCheckedItemCount()),
-				String.valueOf("Number of observations: " + Observations.numObservations()),
-				//Observations.peek().peekTask().toString(),
-				Toast.LENGTH_LONG).show();
-		}catch(EmptyStackException e){
-			//ignore
-		}
 	}
 }

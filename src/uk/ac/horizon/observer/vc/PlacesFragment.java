@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.util.Stack;
 
 import uk.ac.horizon.observer.R;
-import uk.ac.horizon.observer.model.Observations;
 import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Task;
@@ -204,10 +203,6 @@ public class PlacesFragment extends ListFragment {
 		Places.setCurrentPlace(position);
 		Place aplace = new Place(Places.getPlaces().get(position).getName(), 
 			new Stack<Task>());
-		Observations.push(aplace);
-		Toast.makeText(this.getActivity(),
-				String.valueOf("Number of observations: " + Observations.numObservations()),
-				Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -264,14 +259,6 @@ public class PlacesFragment extends ListFragment {
 		}
 
 		private void startTimer() {
-			Observations.reset();
-			
-			try{Toast.makeText(getContext(),
-					String.valueOf("Number of observations: " + Observations.numObservations()),
-					Toast.LENGTH_LONG).show();
-			}catch(NullPointerException e){
-				//ignore
-			}
 			if(null != timer){
 				timer.cancel();
 			}
