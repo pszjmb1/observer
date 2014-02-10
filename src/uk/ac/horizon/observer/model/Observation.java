@@ -46,6 +46,11 @@ public abstract class Observation {
 		}
 	}
 	
+	public static void initDB(Context context){
+		ObservationDBHelper.getInstance(context).onCreate(
+			ObservationDBHelper.getInstance(context).getDb());
+	}
+	
 	/**
 	 * Inserts an observation into the database
 	 * @param context
@@ -120,7 +125,7 @@ public abstract class Observation {
 		 */
 		private static final String TEXT_TYPE = " TEXT";
 		private static final String SEP = ",";
-		private static final String SQL_CREATE_CONFIG = "CREATE TABLE "
+		private static final String SQL_CREATE_CONFIG = "CREATE TABLE IF NOT EXISTS "
 				+ ObservationColumns.TABLE_NAME + "("
 				+ ObservationColumns.COLUMN_NAME_OBS_TIME + " INTEGER NOT NULL" + SEP
 				+ ObservationColumns.COLUMN_NAME_OBS_NAME + " TEXT NOT NULL" + SEP
