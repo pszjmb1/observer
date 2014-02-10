@@ -265,7 +265,7 @@ public class PlacesFragment extends ListFragment {
 
 		private void startTimer() {
 			Observations.reset();
-
+			
 			try{Toast.makeText(getContext(),
 					String.valueOf("Number of observations: " + Observations.numObservations()),
 					Toast.LENGTH_LONG).show();
@@ -314,11 +314,11 @@ public class PlacesFragment extends ListFragment {
 		private void reset() {
 			try{
 				ListView lv = getListView();
-				lv.clearChoices();
-				for (int i = 0; i < lv.getChildCount(); i++) {
-					lv.setItemChecked(i, false);
-				}
-				Places.setCurrentPlace(-1);
+				//lv.clearChoices();
+				//for (int i = 0; i < lv.getChildCount(); i++) {
+				//	lv.setItemChecked(i, false);
+				//}
+				//Places.setCurrentPlace(-1);
 				mCallbacks.onItemSelected(null);
 			}catch(IllegalStateException e){
 				// Do nothing
