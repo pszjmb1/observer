@@ -157,6 +157,9 @@ public class PlacesFragment extends ListFragment {
 		case R.id.action_stop:
 			actionStop();
 			return true;
+		/*case R.id.action_undo:
+			actionUndo();
+			return true;*/
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -165,22 +168,31 @@ public class PlacesFragment extends ListFragment {
 	private void actionStart() {
 		at = new ActionTimer();
 		setListAdapter(new ArrayAdapter<Place>(getActivity(),
-		android.R.layout.simple_list_item_activated_1,
-		android.R.id.text1, Places.getPlaces()));
+				android.R.layout.simple_list_item_activated_1,
+				android.R.id.text1, Places.getPlaces()));
 		Toast.makeText(getContext(), "Started Observer", Toast.LENGTH_SHORT)
 				.show();
 	}
 
 	private void actionStop() {
-		if(null != at){
-		at.cancel();
-		setListAdapter(null);
-		TaskFragment frg = (TaskFragment) this.getActivity().
-				getSupportFragmentManager().findFragmentById(R.id.place_detail_container);
-		frg.setListAdapter(null);
-		Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
-				.show();
+		if (null != at) {
+			at.cancel();
+			setListAdapter(null);
+			TaskFragment frg = (TaskFragment) this.getActivity()
+					.getSupportFragmentManager()
+					.findFragmentById(R.id.place_detail_container);
+			frg.setListAdapter(null);
+			Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
+					.show();
 		}
+	}
+
+	/**
+	 * On undo: Deselect last selection Pop item from selection stack
+	 */
+	private void actionUndo() {
+		Toast.makeText(getContext(), "Undo", Toast.LENGTH_SHORT)
+				.show();
 	}
 
 	@Override
@@ -200,8 +212,8 @@ public class PlacesFragment extends ListFragment {
 					.getInt(STATE_ACTIVATED_POSITION));
 		}
 
-		Toast.makeText(getContext(), "Click Start to begin Observation", Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(getContext(), "Click Start to begin Observation",
+				Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -244,7 +256,7 @@ public class PlacesFragment extends ListFragment {
 					Toast.LENGTH_SHORT).show();
 		}
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);

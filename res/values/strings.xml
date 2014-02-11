@@ -7,5 +7,6 @@
     <string name="break_timer_title">break_timer_title</string>   
     <string name="action_start">Start</string>
     <string name="action_stop">Stop</string>
+    <string name="action_undo">Undo</string>
 
 </resources>
