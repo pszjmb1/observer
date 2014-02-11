@@ -107,9 +107,6 @@ public class PlacesFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setListAdapter(new ArrayAdapter<Place>(getActivity(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, Places.getPlaces()));
 
 		// For action bar
 		setHasOptionsMenu(true);
@@ -143,41 +140,52 @@ public class PlacesFragment extends ListFragment {
 		MenuItem timerItem = menu.findItem(R.id.break_timer);
 		timerText = (TextView) MenuItemCompat.getActionView(timerItem);
 		timerText.setPadding(10, 0, 10, 0);
-		//at = new ActionTimer();
+		// at = new ActionTimer();
 	}
 
-    /**
-     * The system calls this method When the user presses one of the action buttons 
-     * or another item in the action overflow. 
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.action_start:
-            	actionStart();
-                return true;
-            case R.id.action_stop:
-            	actionStop();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    
-    private void actionStart() {
-    	at = new ActionTimer();
-        Toast.makeText(getContext(), "Started Observer", Toast.LENGTH_SHORT).show();
-    }
-    
-    private void actionStop() {
-		at.cancel();
-        Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT).show();
-    }
-	
+	/**
+	 * The system calls this method When the user presses one of the action
+	 * buttons or another item in the action overflow.
+	 */
 	@Override
-	public void onPause(){
-	    super.onPause();
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_start:
+			actionStart();
+			return true;
+		case R.id.action_stop:
+			actionStop();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void actionStart() {
+		at = new ActionTimer();
+		setListAdapter(new ArrayAdapter<Place>(getActivity(),
+		android.R.layout.simple_list_item_activated_1,
+		android.R.id.text1, Places.getPlaces()));
+		Toast.makeText(getContext(), "Started Observer", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	private void actionStop() {
+		if(null != at){
+		at.cancel();
+		setListAdapter(null);
+		TaskFragment frg = (TaskFragment) this.getActivity().
+				getSupportFragmentManager().findFragmentById(R.id.place_detail_container);
+		frg.setListAdapter(null);
+		Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
+				.show();
+		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
 		at.cancel();
 	}
 
@@ -191,6 +199,9 @@ public class PlacesFragment extends ListFragment {
 			setActivatedPosition(savedInstanceState
 					.getInt(STATE_ACTIVATED_POSITION));
 		}
+
+		Toast.makeText(getContext(), "Click Start to begin Observation", Toast.LENGTH_SHORT)
+				.show();
 	}
 
 	@Override
@@ -221,14 +232,19 @@ public class PlacesFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
-		super.onListItemClick(listView, view, position, id);
+		if (startedTimer) {
+			super.onListItemClick(listView, view, position, id);
 
-		mCallbacks.onItemSelected("" + position);
-		Places.setCurrentPlace(position);
-		Place aplace = new Place(Places.getCurrentPlaceName(), 
-			new Stack<Task>());
+			mCallbacks.onItemSelected("" + position);
+			Places.setCurrentPlace(position);
+			Place aplace = new Place(Places.getCurrentPlaceName(),
+					new Stack<Task>());
+		} else {
+			Toast.makeText(getContext(), "Click Start to begin Observation",
+					Toast.LENGTH_SHORT).show();
+		}
 	}
-
+	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -248,7 +264,7 @@ public class PlacesFragment extends ListFragment {
 		// When setting CHOICE_MODE_SINGLE, ListView will automatically
 		// give items the 'activated' state when touched.
 		getListView().setChoiceMode(
-				activateOnItemClick ? ListView.CHOICE_MODE_SINGLE
+				(activateOnItemClick) ? ListView.CHOICE_MODE_SINGLE
 						: ListView.CHOICE_MODE_NONE);
 	}
 
@@ -269,16 +285,16 @@ public class PlacesFragment extends ListFragment {
 	 */
 	private class ActionTimer {
 		private CountDownTimer timer = null;
-		
+
 		public ActionTimer() {
 			if (!startedTimer) {
 				startedTimer = true;
 				startTimer();
 			}
 		}
-		
-		public void cancel(){
-			if(null != this.timer){
+
+		public void cancel() {
+			if (null != this.timer) {
 				this.timer.cancel();
 				startedTimer = false;
 				this.timer = null;
@@ -286,7 +302,7 @@ public class PlacesFragment extends ListFragment {
 		}
 
 		private void startTimer() {
-			if(null != timer){
+			if (null != timer) {
 				cancel();
 			}
 			Places.setCurrentBin(new Date().getTime());
@@ -299,7 +315,7 @@ public class PlacesFragment extends ListFragment {
 				 */
 				@Override
 				public void onFinish() {
-					//dummyDataHandler();
+					// dummyDataHandler();
 					observationCount++;
 					reset();
 					startTimer();
@@ -327,15 +343,15 @@ public class PlacesFragment extends ListFragment {
 		 * fragments
 		 */
 		private void reset() {
-			try{
+			try {
 				ListView lv = getListView();
-				//lv.clearChoices();
-				//for (int i = 0; i < lv.getChildCount(); i++) {
-				//	lv.setItemChecked(i, false);
-				//}
-				//Places.setCurrentPlace(-1);
+				// lv.clearChoices();
+				// for (int i = 0; i < lv.getChildCount(); i++) {
+				// lv.setItemChecked(i, false);
+				// }
+				// Places.setCurrentPlace(-1);
 				mCallbacks.onItemSelected(null);
-			}catch(IllegalStateException e){
+			} catch (IllegalStateException e) {
 				// Do nothing
 			}
 		}
@@ -344,22 +360,22 @@ public class PlacesFragment extends ListFragment {
 			Item item = new Item();
 			item.Text = "Awesome item";
 			mClient.getTable(Item.class).insert(item,
-				new TableOperationCallback<Item>() {
-					public void onCompleted(Item entity,
-							Exception exception,
-							ServiceFilterResponse response) {
-						if (exception == null) {
-							// Insert succeeded
-							Toast.makeText(getContext(),
-									"Insert succeeded", Toast.LENGTH_LONG)
-									.show();
-						} else {
-							// Insert failed
-							Toast.makeText(getContext(), "Insert failed",
-									Toast.LENGTH_LONG).show();
+					new TableOperationCallback<Item>() {
+						public void onCompleted(Item entity,
+								Exception exception,
+								ServiceFilterResponse response) {
+							if (exception == null) {
+								// Insert succeeded
+								Toast.makeText(getContext(),
+										"Insert succeeded", Toast.LENGTH_LONG)
+										.show();
+							} else {
+								// Insert failed
+								Toast.makeText(getContext(), "Insert failed",
+										Toast.LENGTH_LONG).show();
+							}
 						}
-					}
-				});
+					});
 		}
 	}
 
