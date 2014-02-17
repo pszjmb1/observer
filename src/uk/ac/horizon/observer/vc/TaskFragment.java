@@ -99,5 +99,9 @@ public class TaskFragment extends ListFragment {
 		Task tmp = myTasks.get(position);
 		Task task = new Task(tmp.getName(), Places.getCurrentPlace());
 		task.addObservation(this.getActivity());
+		//Log the insertion of the new row
+		//long lastobs = task.addObservation(this.getActivity());
+		//Toast.makeText(this.getActivity(), "lastobs: " + lastobs, Toast.LENGTH_SHORT)
+		//		.show();
 	}
 }

@@ -61,7 +61,7 @@ public class Task extends Observation {
 				.insert(ObservationDBHelper.ObservationColumns.TABLE_NAME,
 						null, values);
 		// Log the insertion of the new row
-		Log.i(this.getClass().getName(), "" + lastobs, null);
+		//Log.i(this.getClass().getName(), "" + lastobs, null);
 		return lastobs;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Stack;
 
 import uk.ac.horizon.observer.R;
+import uk.ac.horizon.observer.model.Observation;
 import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Task;
@@ -166,6 +167,7 @@ public class PlacesFragment extends ListFragment {
 	}
 
 	private void actionStart() {
+		Observation.dumpDB(this.getContext());
 		at = new ActionTimer();
 		setListAdapter(new ArrayAdapter<Place>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
@@ -185,6 +187,7 @@ public class PlacesFragment extends ListFragment {
 			Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
 					.show();
 		}
+		Observation.dumpDB(this.getContext());
 	}
 
 	/**
@@ -198,7 +201,9 @@ public class PlacesFragment extends ListFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		at.cancel();
+		if(null != at){
+			at.cancel();
+		}
 	}
 
 	@Override
@@ -251,6 +256,7 @@ public class PlacesFragment extends ListFragment {
 			Places.setCurrentPlace(position);
 			Place aplace = new Place(Places.getCurrentPlaceName(),
 					new Stack<Task>());
+			aplace.addObservation(getContext());
 		} else {
 			Toast.makeText(getContext(), "Click Start to begin Observation",
 					Toast.LENGTH_SHORT).show();
