@@ -8,6 +8,7 @@ import uk.ac.horizon.observer.R;
 import uk.ac.horizon.observer.model.Observation;
 import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
+import uk.ac.horizon.observer.model.Stop;
 import uk.ac.horizon.observer.model.Task;
 import android.app.Activity;
 import android.os.Bundle;
