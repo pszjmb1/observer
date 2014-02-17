@@ -33,6 +33,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlaceListActivity" />
         </activity>
+        <activity
+            android:name="uk.ac.horizon.observer.vc.SettingsActivity"
+            android:label="@string/title_settings"
+            android:parentActivityName=".vc.PlacesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SettingsActivity" />
+        </activity>
 
     </application>
 </manifest>
