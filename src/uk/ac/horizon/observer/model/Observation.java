@@ -215,7 +215,7 @@ public abstract class Observation {
                             + "//databases//" + DATABASE_NAME;
                     File currentDB = new File(data, currentDBPath);
                     File backupDB = new File(Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_DOWNLOADS), DATABASE_NAME);
+                            Environment.DIRECTORY_DOWNLOADS), DATABASE_NAME );
                     backupDB.createNewFile();
 
                     FileInputStream fis = new FileInputStream(currentDB);

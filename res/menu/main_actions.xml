@@ -13,8 +13,11 @@
           android:title="@string/break_timer_title"
           android:showAsAction="always"
           android:actionViewClass="android.widget.TextView" />
-    <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
+    <!-- Items such as Settings that should always be in the overflow -->
+    <item android:id="@+id/action_backup"
+          android:title="@string/action_backup"
           android:showAsAction="never" />
+    <!--<item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:showAsAction="never" /> -->
 </menu>

@@ -159,9 +159,12 @@ public class PlacesFragment extends ListFragment {
 		case R.id.action_stop:
 			actionStop();
 			return true;
-		case R.id.action_settings:
+		/*case R.id.action_settings:
 			Intent settingsIntent = new Intent(this.getActivity(), SettingsActivity.class);
 			startActivity(settingsIntent);
+			return true;*/
+		case R.id.action_backup:
+			actionBackup();
 			return true;
 		/*case R.id.action_undo:
 			actionUndo();
@@ -172,7 +175,6 @@ public class PlacesFragment extends ListFragment {
 	}
 
 	private void actionStart() {
-		Observation.dumpDB(this.getContext());
 		at = new ActionTimer();
 		setListAdapter(new ArrayAdapter<Place>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
@@ -192,7 +194,6 @@ public class PlacesFragment extends ListFragment {
 			Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
 					.show();
 		}
-		Observation.dumpDB(this.getContext());
 	}
 
 	/**
@@ -201,6 +202,16 @@ public class PlacesFragment extends ListFragment {
 	private void actionUndo() {
 		Toast.makeText(getContext(), "Undo", Toast.LENGTH_SHORT)
 				.show();
+	}
+	
+	/**
+	 * On backup: Backup database to text file. If the preference for resetting the db is
+	 * toggled on then empty the DB tables.
+	 */
+	private void actionBackup(){
+		Toast.makeText(getContext(), "Backing up database", Toast.LENGTH_SHORT)
+		.show();
+		Observation.dumpDB(this.getContext());
 	}
 
 	@Override
