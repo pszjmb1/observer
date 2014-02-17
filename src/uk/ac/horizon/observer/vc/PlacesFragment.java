@@ -10,7 +10,6 @@ import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Task;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.ListFragment;
@@ -191,6 +190,7 @@ public class PlacesFragment extends ListFragment {
 					.getSupportFragmentManager()
 					.findFragmentById(R.id.place_detail_container);
 			frg.setListAdapter(null);
+			new Stop().addObservation(this.getActivity());
 			Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
 					.show();
 		}
