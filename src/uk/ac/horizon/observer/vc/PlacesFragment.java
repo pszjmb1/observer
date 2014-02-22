@@ -65,13 +65,16 @@ public class PlacesFragment extends ListFragment {
 	private static final long DURATION = 10000;
 	private static final long INTERVAL = 1000;
 	private static int observationCount = 1;
-	private static boolean startedTimer = false;
+	// private static boolean startedTimer = false;
 	private static ActionTimer at = null;
+	final int MENUITEMSTART =0;
+	final int MENUITEMSTOP =1;
+	Menu myMenu;
 
 	/**
 	 * For data handling
 	 */
-	private MobileServiceClient mClient;
+	//private MobileServiceClient mClient;
 
 	private Activity getContext() {
 		return this.getActivity();
@@ -117,14 +120,14 @@ public class PlacesFragment extends ListFragment {
 		setRetainInstance(true);
 
 		// For Data handling
-		try {
+		/*try {
 			mClient = new MobileServiceClient(
 					"https://wayward.azure-mobile.net/",
 					"roguTRplNWWHyuhEhMhOIeLENGQBLB58", this.getActivity());
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	/**
@@ -145,6 +148,19 @@ public class PlacesFragment extends ListFragment {
 		// at = new ActionTimer();
 	}
 
+	@Override
+	public void onPrepareOptionsMenu (Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		myMenu = menu;
+	    if (null == at){
+	        menu.getItem(MENUITEMSTOP).setEnabled(false);
+	        menu.getItem(MENUITEMSTART).setEnabled(true);
+	    } else{
+	        menu.getItem(MENUITEMSTOP).setEnabled(true);
+	        menu.getItem(MENUITEMSTART).setEnabled(false);	    	
+	    }
+	}
+	
 	/**
 	 * The system calls this method When the user presses one of the action
 	 * buttons or another item in the action overflow.
@@ -155,20 +171,25 @@ public class PlacesFragment extends ListFragment {
 		switch (item.getItemId()) {
 		case R.id.action_start:
 			actionStart();
+			myMenu.getItem(MENUITEMSTOP).setEnabled(true);
+			myMenu.getItem(MENUITEMSTART).setEnabled(false);
 			return true;
 		case R.id.action_stop:
 			actionStop();
+			myMenu.getItem(MENUITEMSTOP).setEnabled(false);
+			myMenu.getItem(MENUITEMSTART).setEnabled(true);
 			return true;
-		/*case R.id.action_settings:
-			Intent settingsIntent = new Intent(this.getActivity(), SettingsActivity.class);
-			startActivity(settingsIntent);
-			return true;*/
+			/*
+			 * case R.id.action_settings: Intent settingsIntent = new
+			 * Intent(this.getActivity(), SettingsActivity.class);
+			 * startActivity(settingsIntent); return true;
+			 */
 		case R.id.action_backup:
 			actionBackup();
 			return true;
-		/*case R.id.action_undo:
-			actionUndo();
-			return true;*/
+			/*
+			 * case R.id.action_undo: actionUndo(); return true;
+			 */
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -186,41 +207,51 @@ public class PlacesFragment extends ListFragment {
 	private void actionStop() {
 		if (null != at) {
 			at.cancel();
-			setListAdapter(null);
-			TaskFragment frg = (TaskFragment) this.getActivity()
-					.getSupportFragmentManager()
-					.findFragmentById(R.id.place_detail_container);
-			frg.setListAdapter(null);
 			new Stop().addObservation(this.getActivity());
-			Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
-					.show();
+			at = null;
 		}
+		TaskFragment frg = (TaskFragment) this.getActivity()
+				.getSupportFragmentManager()
+				.findFragmentById(R.id.place_detail_container);
+		if (null != frg) {
+			frg.setListAdapter(null);
+		}
+		setListAdapter(null);
+
+		Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
+				.show();
+
 	}
 
 	/**
 	 * On undo: Deselect last selection Pop item from selection stack
-	 */
+	 
 	private void actionUndo() {
-		Toast.makeText(getContext(), "Undo", Toast.LENGTH_SHORT)
-				.show();
-	}
-	
+		Toast.makeText(getContext(), "Undo", Toast.LENGTH_SHORT).show();
+	}*/
+
 	/**
-	 * On backup: Backup database to text file. If the preference for resetting the db is
-	 * toggled on then empty the DB tables.
+	 * On backup: Backup database to text file. If the preference for resetting
+	 * the db is toggled on then empty the DB tables.
 	 */
-	private void actionBackup(){
+	private void actionBackup() {
 		Toast.makeText(getContext(), "Backing up database", Toast.LENGTH_SHORT)
-		.show();
+				.show();
 		Observation.dumpDB(this.getContext());
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		if(null != at){
-			at.cancel();
-		}
+		onDetach();
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		actionStop();
+		myMenu.getItem(MENUITEMSTOP).setEnabled(false);
+		myMenu.getItem(MENUITEMSTART).setEnabled(true);
 	}
 
 	@Override
@@ -257,6 +288,7 @@ public class PlacesFragment extends ListFragment {
 
 		// Reset the active callbacks interface to the dummy implementation.
 		mCallbacks = sDummyCallbacks;
+		actionStop();
 	}
 
 	/**
@@ -266,7 +298,7 @@ public class PlacesFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
-		if (startedTimer) {
+		if (null != at) {
 			super.onListItemClick(listView, view, position, id);
 
 			mCallbacks.onItemSelected("" + position);
@@ -322,16 +354,13 @@ public class PlacesFragment extends ListFragment {
 		private CountDownTimer timer = null;
 
 		public ActionTimer() {
-			if (!startedTimer) {
-				startedTimer = true;
-				startTimer();
-			}
+			startTimer();
 		}
 
 		public void cancel() {
 			if (null != this.timer) {
+				timerText.setText("");
 				this.timer.cancel();
-				startedTimer = false;
 				this.timer = null;
 			}
 		}
@@ -344,16 +373,15 @@ public class PlacesFragment extends ListFragment {
 			timer = new CountDownTimer(DURATION, INTERVAL) {
 
 				/**
-				 * When the countdown finishes: - Todo: Store the click data -
-				 * increment the observation counter - reset the interface -
-				 * Restart the countdown
+				 * When the countdown finishes: increment the observation
+				 * counter - reset the interface - Restart the countdown
 				 */
 				@Override
 				public void onFinish() {
 					// dummyDataHandler();
 					observationCount++;
 					reset();
-					startTimer();
+					this.start();
 				}
 
 				/**
@@ -379,49 +407,10 @@ public class PlacesFragment extends ListFragment {
 		 */
 		private void reset() {
 			try {
-				ListView lv = getListView();
-				// lv.clearChoices();
-				// for (int i = 0; i < lv.getChildCount(); i++) {
-				// lv.setItemChecked(i, false);
-				// }
-				// Places.setCurrentPlace(-1);
 				mCallbacks.onItemSelected(null);
 			} catch (IllegalStateException e) {
 				// Do nothing
 			}
 		}
-
-		private void dummyDataHandler() {
-			Item item = new Item();
-			item.Text = "Awesome item";
-			mClient.getTable(Item.class).insert(item,
-					new TableOperationCallback<Item>() {
-						public void onCompleted(Item entity,
-								Exception exception,
-								ServiceFilterResponse response) {
-							if (exception == null) {
-								// Insert succeeded
-								Toast.makeText(getContext(),
-										"Insert succeeded", Toast.LENGTH_LONG)
-										.show();
-							} else {
-								// Insert failed
-								Toast.makeText(getContext(), "Insert failed",
-										Toast.LENGTH_LONG).show();
-							}
-						}
-					});
-		}
-	}
-
-	/**
-	 * Data handling test
-	 * 
-	 * @author Jesse
-	 * 
-	 */
-	private class Item {
-		public String Id;
-		public String Text;
 	}
 }

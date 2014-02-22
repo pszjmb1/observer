@@ -6,6 +6,7 @@ import uk.ac.horizon.observer.model.Observation.ObservationDBHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * An observable task
@@ -62,6 +63,8 @@ public class Task extends Observation {
 						null, values);
 		// Log the insertion of the new row
 		//Log.i(this.getClass().getName(), "" + lastobs, null);
+		//Toast.makeText(context, "lastobs: " + lastobs, Toast.LENGTH_SHORT)
+		//.show();
 		return lastobs;
 	}
 }
