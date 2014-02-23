@@ -80,13 +80,13 @@ public class TaskFragment extends ListFragment {
 						String.valueOf("No tasks to select for " + Places.getCurrentPlaceName()),
 						Toast.LENGTH_LONG).show();			
 					}
-			else{	
+				
 				ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(
 					this.getActivity(),
 					android.R.layout.simple_list_item_activated_1, myTasks);
 			setListAdapter(adapter);
 			getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-			}
+			
 		} 
 	}
 

@@ -3,24 +3,24 @@ package uk.ac.horizon.observer.vc;
 import uk.ac.horizon.observer.R;
 import uk.ac.horizon.observer.model.Observation;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 /**
  * An activity representing a list of Places. This activity has different
  * presentations for handset and tablet-size devices. On handsets, the activity
- * presents a list of items, which when touched, lead to a
- * {@link TasksActivity} representing item details. On tablets, the
- * activity presents the list of items and item details side-by-side using two
- * vertical panes.
+ * presents a list of items, which when touched, lead to a {@link TasksActivity}
+ * representing item details. On tablets, the activity presents the list of
+ * items and item details side-by-side using two vertical panes.
  * <p>
  * The activity makes heavy use of fragments. The list of items is a
  * {@link PlacesFragment} and the item details (if present) is a
  * {@link TaskFragment}.
  * <p>
- * This activity also implements the required
- * {@link PlacesFragment.Callbacks} interface to listen for item selections.
+ * This activity also implements the required {@link PlacesFragment.Callbacks}
+ * interface to listen for item selections.
  */
 public class PlacesActivity extends FragmentActivity implements
 		PlacesFragment.Callbacks {
@@ -30,6 +30,7 @@ public class PlacesActivity extends FragmentActivity implements
 	 * device.
 	 */
 	private boolean mTwoPane;
+	private boolean rotated = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,8 @@ public class PlacesActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * Callback method from {@link PlacesFragment.Callbacks} indicating that
-	 * the item with the given ID was selected.
+	 * Callback method from {@link PlacesFragment.Callbacks} indicating that the
+	 * item with the given ID was selected.
 	 */
 	@Override
 	public void onItemSelected(String id) {
@@ -75,5 +76,11 @@ public class PlacesActivity extends FragmentActivity implements
 			detailIntent.putExtra(TaskFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
 		}
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		finish();
 	}
 }

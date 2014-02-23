@@ -1,6 +1,5 @@
 package uk.ac.horizon.observer.vc;
 
-import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.Stack;
 
@@ -11,6 +10,7 @@ import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Stop;
 import uk.ac.horizon.observer.model.Task;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.ListFragment;
@@ -20,13 +20,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 
 /**
  * A list fragment representing a list of Places. This fragment also supports
@@ -67,14 +64,14 @@ public class PlacesFragment extends ListFragment {
 	private static int observationCount = 1;
 	// private static boolean startedTimer = false;
 	private static ActionTimer at = null;
-	final int MENUITEMSTART =0;
-	final int MENUITEMSTOP =1;
+	final int MENUITEMSTART = 0;
+	final int MENUITEMSTOP = 1;
 	Menu myMenu;
 
 	/**
 	 * For data handling
 	 */
-	//private MobileServiceClient mClient;
+	// private MobileServiceClient mClient;
 
 	private Activity getContext() {
 		return this.getActivity();
@@ -120,14 +117,13 @@ public class PlacesFragment extends ListFragment {
 		setRetainInstance(true);
 
 		// For Data handling
-		/*try {
-			mClient = new MobileServiceClient(
-					"https://wayward.azure-mobile.net/",
-					"roguTRplNWWHyuhEhMhOIeLENGQBLB58", this.getActivity());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		/*
+		 * try { mClient = new MobileServiceClient(
+		 * "https://wayward.azure-mobile.net/",
+		 * "roguTRplNWWHyuhEhMhOIeLENGQBLB58", this.getActivity()); } catch
+		 * (MalformedURLException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
 	}
 
 	/**
@@ -149,18 +145,18 @@ public class PlacesFragment extends ListFragment {
 	}
 
 	@Override
-	public void onPrepareOptionsMenu (Menu menu) {
+	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 		myMenu = menu;
-	    if (null == at){
-	        menu.getItem(MENUITEMSTOP).setEnabled(false);
-	        menu.getItem(MENUITEMSTART).setEnabled(true);
-	    } else{
-	        menu.getItem(MENUITEMSTOP).setEnabled(true);
-	        menu.getItem(MENUITEMSTART).setEnabled(false);	    	
-	    }
+		if (null == at) {
+			menu.getItem(MENUITEMSTOP).setEnabled(false);
+			menu.getItem(MENUITEMSTART).setEnabled(true);
+		} else {
+			menu.getItem(MENUITEMSTOP).setEnabled(true);
+			menu.getItem(MENUITEMSTART).setEnabled(false);
+		}
 	}
-	
+
 	/**
 	 * The system calls this method When the user presses one of the action
 	 * buttons or another item in the action overflow.
@@ -210,12 +206,7 @@ public class PlacesFragment extends ListFragment {
 			new Stop().addObservation(this.getActivity());
 			at = null;
 		}
-		TaskFragment frg = (TaskFragment) this.getActivity()
-				.getSupportFragmentManager()
-				.findFragmentById(R.id.place_detail_container);
-		if (null != frg) {
-			frg.setListAdapter(null);
-		}
+		setTaskListAdapter(null);
 		setListAdapter(null);
 
 		Toast.makeText(getContext(), "Stopped Observer", Toast.LENGTH_SHORT)
@@ -223,12 +214,21 @@ public class PlacesFragment extends ListFragment {
 
 	}
 
+	private void setTaskListAdapter(ListAdapter adapter) {
+		TaskFragment frg = (TaskFragment) this.getActivity()
+				.getSupportFragmentManager()
+				.findFragmentById(R.id.place_detail_container);
+		if (null != frg) {
+			frg.setListAdapter(adapter);
+		}
+	}
+
 	/**
 	 * On undo: Deselect last selection Pop item from selection stack
-	 
-	private void actionUndo() {
-		Toast.makeText(getContext(), "Undo", Toast.LENGTH_SHORT).show();
-	}*/
+	 * 
+	 * private void actionUndo() { Toast.makeText(getContext(), "Undo",
+	 * Toast.LENGTH_SHORT).show(); }
+	 */
 
 	/**
 	 * On backup: Backup database to text file. If the preference for resetting
@@ -243,9 +243,11 @@ public class PlacesFragment extends ListFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
+		//Toast.makeText(getContext(), "onPause", Toast.LENGTH_SHORT)
+		//.show();
 		onDetach();
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
