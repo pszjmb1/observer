@@ -13,6 +13,7 @@ public class Places {
 	private static List<Place> places = null;
 	private static int currentPlace = -1;
 	private static long currentBin;
+	private static long currentSession;
 	public static List<Place> getPlaces(){
 		if(null == places){
 			init();
@@ -31,8 +32,9 @@ public class Places {
 			return null;
 		}
 	}	
-	public static void setCurrentPlace(int i){
+	public static void setCurrentPlace(int i, long date){
 		currentPlace = i;
+		places.get(currentPlace).setDate(date);
 	}	
 	public static String getCurrentPlaceName(){
 		if(null != places && currentPlace > -1){
@@ -53,6 +55,12 @@ public class Places {
 	}	
 	public static void setCurrentBin(long binIn){
 		currentBin = binIn;
+	}
+	public static long getSession(){
+		return currentSession;
+	}
+	public static void setSession(long sessionIn){
+		currentSession = sessionIn;
 	}
 	
 	private Places(){

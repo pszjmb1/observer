@@ -25,7 +25,7 @@ import android.widget.Toast;
 public abstract class Observation {
 	private String name;
 	private String type;
-	private Date observationTime = new Date();
+	protected Date observationTime = new Date();
 	// The id of the last inserted observation; -2 means the value has not been
 	// set
 	protected static long lastobs = -2;
@@ -65,6 +65,8 @@ public abstract class Observation {
 		// Create a new map of values, where column names are the keys
 		ContentValues values = new ContentValues();
 
+		values.put(ObservationDBHelper.ObservationColumns.COLUMN_NAME_SESSION,
+				Places.getSession());
 		values.put(ObservationDBHelper.ObservationColumns.COLUMN_NAME_OBS_TIME,
 				this.observationTime.getTime());
 		values.put(ObservationDBHelper.ObservationColumns.COLUMN_NAME_OBS_NAME,
@@ -157,6 +159,9 @@ public abstract class Observation {
 		private static final String SQL_CREATE_CONFIG = "CREATE TABLE IF NOT EXISTS "
 				+ ObservationColumns.TABLE_NAME
 				+ "("
+				+ ObservationColumns.COLUMN_NAME_SESSION
+				+ " INTEGER NOT NULL"
+				+ SEP
 				+ ObservationColumns.COLUMN_NAME_OBS_TIME
 				+ " INTEGER NOT NULL"
 				+ SEP
@@ -192,6 +197,7 @@ public abstract class Observation {
 		protected static abstract class ObservationColumns implements
 				BaseColumns {
 			public static final String TABLE_NAME = "Observations";
+			public static final String COLUMN_NAME_SESSION = "session";
 			public static final String COLUMN_NAME_OBS_TIME = "obs_time";
 			public static final String COLUMN_NAME_OBS_NAME = "obs_name";
 			public static final String COLUMN_NAME_OBS_TYPE = "obs_type";

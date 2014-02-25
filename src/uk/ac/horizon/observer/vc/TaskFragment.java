@@ -5,6 +5,7 @@ import java.util.List;
 
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Task;
+import uk.ac.horizon.observer.model.TaskBin;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -91,14 +92,15 @@ public class TaskFragment extends ListFragment {
 	}
 
 	/**
-	 * @todo: Add values of clicked items to the click queue 
+	 * Add values of clicked items to the click queue 
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		Task tmp = myTasks.get(position);
 		Task task = new Task(tmp.getName(), Places.getCurrentPlace());
-		task.addObservation(this.getActivity());
+		TaskBin.getInstance().addTask(task);
+		//task.addObservation(this.getActivity());
 		//Log the insertion of the new row
 		//long lastobs = task.addObservation(this.getActivity());
 		//Toast.makeText(this.getActivity(), "lastobs: " + lastobs, Toast.LENGTH_SHORT)

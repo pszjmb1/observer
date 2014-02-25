@@ -1,5 +1,6 @@
 package uk.ac.horizon.observer.model;
 
+import java.util.Date;
 import java.util.Stack;
 
 /**
@@ -32,5 +33,9 @@ public class Place extends Observation {
 	
 	public int size(){
 		return tasks.size();
+	}
+	
+	public void setDate(long date){
+		this.observationTime = new Date(date);
 	}
 }

@@ -9,8 +9,8 @@ import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Stop;
 import uk.ac.horizon.observer.model.Task;
+import uk.ac.horizon.observer.model.TaskBin;
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.ListFragment;
@@ -59,7 +59,7 @@ public class PlacesFragment extends ListFragment {
 	 * For the timer in the action bar
 	 */
 	private static TextView timerText;
-	private static final long DURATION = 10000;
+	private static final long DURATION = 30000;	//30 seconds
 	private static final long INTERVAL = 1000;
 	private static int observationCount = 1;
 	// private static boolean startedTimer = false;
@@ -67,7 +67,7 @@ public class PlacesFragment extends ListFragment {
 	final int MENUITEMSTART = 0;
 	final int MENUITEMSTOP = 1;
 	Menu myMenu;
-
+	
 	/**
 	 * For data handling
 	 */
@@ -192,6 +192,7 @@ public class PlacesFragment extends ListFragment {
 	}
 
 	private void actionStart() {
+		Places.setSession(new Date().getTime());
 		at = new ActionTimer();
 		setListAdapter(new ArrayAdapter<Place>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
@@ -201,11 +202,13 @@ public class PlacesFragment extends ListFragment {
 	}
 
 	private void actionStop() {
+		observationCount++;
 		if (null != at) {
 			at.cancel();
 			new Stop().addObservation(this.getActivity());
 			at = null;
 		}
+		TaskBin.getInstance().reset(getContext());
 		setTaskListAdapter(null);
 		setListAdapter(null);
 
@@ -252,8 +255,8 @@ public class PlacesFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		actionStop();
-		myMenu.getItem(MENUITEMSTOP).setEnabled(false);
-		myMenu.getItem(MENUITEMSTART).setEnabled(true);
+		/*myMenu.getItem(MENUITEMSTOP).setEnabled(false);
+		myMenu.getItem(MENUITEMSTART).setEnabled(true);*/
 	}
 
 	@Override
@@ -304,9 +307,8 @@ public class PlacesFragment extends ListFragment {
 			super.onListItemClick(listView, view, position, id);
 
 			mCallbacks.onItemSelected("" + position);
-			Places.setCurrentPlace(position);
-			Place aplace = new Place(Places.getCurrentPlaceName(),
-					new Stack<Task>());
+			Places.setCurrentPlace(position, new Date().getTime());
+			Place aplace = Places.getCurrentPlace();
 			aplace.addObservation(getContext());
 		} else {
 			Toast.makeText(getContext(), "Click Start to begin Observation",
@@ -408,7 +410,9 @@ public class PlacesFragment extends ListFragment {
 		 * fragments
 		 */
 		private void reset() {
+			Places.setCurrentBin(new Date().getTime());
 			try {
+				TaskBin.getInstance().reset(getContext());
 				mCallbacks.onItemSelected(null);
 			} catch (IllegalStateException e) {
 				// Do nothing

@@ -39,6 +39,8 @@ public class Task extends Observation {
 		// Create a new map of values, where column names are the keys
 		ContentValues values = new ContentValues();
 
+		values.put(ObservationDBHelper.ObservationColumns.COLUMN_NAME_SESSION,
+				Places.getSession());
 		values.put(ObservationDBHelper.ObservationColumns.COLUMN_NAME_OBS_TIME,
 				this.getObservationTime().getTime());
 		values.put(ObservationDBHelper.ObservationColumns.COLUMN_NAME_OBS_NAME,
