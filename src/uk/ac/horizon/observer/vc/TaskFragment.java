@@ -1,15 +1,15 @@
 package uk.ac.horizon.observer.vc;
 
-import java.util.EmptyStackException;
 import java.util.List;
 
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Task;
 import uk.ac.horizon.observer.model.TaskBin;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -80,14 +80,18 @@ public class TaskFragment extends ListFragment {
 				Toast.makeText(this.getActivity(),
 						String.valueOf("No tasks to select for " + Places.getCurrentPlaceName()),
 						Toast.LENGTH_LONG).show();			
-					}
-				
-				ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(
+			}
+			ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(
 					this.getActivity(),
 					android.R.layout.simple_list_item_activated_1, myTasks);
 			setListAdapter(adapter);
-			getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-			
+			ListView lv = getListView();
+			lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			lv.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {              
+					getListView().getChildAt(0).setEnabled(false);
+		        }
+			});
 		} 
 	}
 
