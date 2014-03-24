@@ -30,16 +30,16 @@ public class TaskBin {
 	 * and none are added.
 	 * @param t
 	 */
-	public void addTask(Task t){
+	public Task addTask(Task t){
 		if(!taskBin.containsKey(t.getName())){
-			taskBin.put(t.getName(), t);
+			return taskBin.put(t.getName(), t);
 		}else{
-			removeTask(t);
+			return removeTask(t);
 		}
 	}
 	
-	private void removeTask(Task t){
-		taskBin.remove(t.getName());
+	private Task removeTask(Task t){
+		return taskBin.remove(t.getName());
 	}
 	
 	/**

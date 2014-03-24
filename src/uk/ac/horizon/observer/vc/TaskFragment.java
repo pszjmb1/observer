@@ -2,6 +2,8 @@ package uk.ac.horizon.observer.vc;
 
 import java.util.List;
 
+import uk.ac.horizon.observer.R;
+import uk.ac.horizon.observer.model.Place;
 import uk.ac.horizon.observer.model.Places;
 import uk.ac.horizon.observer.model.Task;
 import uk.ac.horizon.observer.model.TaskBin;
@@ -59,27 +61,32 @@ public class TaskFragment extends ListFragment {
 
 	/**
 	 * On create set the tasks to the ones for the corresponding Place
+	 * 
 	 * @author Jesse
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		myTasks = Places.getTasksforCurrentPlace();	// can be null
+		myTasks = Places.getTasksforCurrentPlace(); // can be null
 	}
 
 	/**
-	 * Display a multipe choice selection list of the tasks available for the given Place
+	 * Display a multipe choice selection list of the tasks available for the
+	 * given Place
+	 * 
 	 * @author Jesse
 	 */
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
-		if(null != myTasks){
-			if(myTasks.isEmpty()){
-				Toast.makeText(this.getActivity(),
-						String.valueOf("No tasks to select for " + Places.getCurrentPlaceName()),
-						Toast.LENGTH_LONG).show();			
+
+		if (null != myTasks) {
+			if (myTasks.isEmpty()) {
+				Toast.makeText(
+						this.getActivity(),
+						String.valueOf("No tasks to select for "
+								+ Places.getCurrentPlaceName()),
+						Toast.LENGTH_LONG).show();
 			}
 			ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(
 					this.getActivity(),
@@ -87,16 +94,42 @@ public class TaskFragment extends ListFragment {
 			setListAdapter(adapter);
 			ListView lv = getListView();
 			lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			// Grey out test
 			lv.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {              
-					getListView().getChildAt(0).setEnabled(false);
-		        }
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					boolean itemIsEnabled = true;
+					Place current = Places.getCurrentPlace();
+					Integer[] disableds = current.getDisabledTasks();
+					if (null != disableds) {
+						for (int i = 0; i < disableds.length; i++) {
+							getListView().getChildAt(disableds[i]).setEnabled(
+									false);
+							getListView().getChildAt(disableds[i])
+									.setBackgroundColor(
+											getResources().getColor(
+													R.color.grey));
+							if (position == disableds[i]) {
+								itemIsEnabled = false;
+							}
+						}
+					} else{
+						Toast.makeText(getActivity(), "getCurrentPlace: " + Places.getCurrentPlace().getName(),
+								 Toast.LENGTH_SHORT).show();
+					}
+					if (itemIsEnabled) {
+						Task tmp = myTasks.get(position);
+						Task task = new Task(tmp.getName(), Places
+								.getCurrentPlace());
+						TaskBin.getInstance().addTask(task);
+					}
+				}
 			});
-		} 
+		}
 	}
 
 	/**
-	 * Add values of clicked items to the click queue 
+	 * Add values of clicked items to the click queue
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
@@ -104,10 +137,11 @@ public class TaskFragment extends ListFragment {
 		Task tmp = myTasks.get(position);
 		Task task = new Task(tmp.getName(), Places.getCurrentPlace());
 		TaskBin.getInstance().addTask(task);
-		//task.addObservation(this.getActivity());
-		//Log the insertion of the new row
-		//long lastobs = task.addObservation(this.getActivity());
-		//Toast.makeText(this.getActivity(), "lastobs: " + lastobs, Toast.LENGTH_SHORT)
-		//		.show();
+		// task.addObservation(this.getActivity());
+		// Log the insertion of the new row
+		// long lastobs = task.addObservation(this.getActivity());
+		// Toast.makeText(this.getActivity(), "lastobs: " + lastobs,
+		// Toast.LENGTH_SHORT)
+		// .show();
 	}
 }

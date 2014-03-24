@@ -9,10 +9,16 @@ import java.util.Stack;
  */
 public class Place extends Observation {
 	private Stack<Task> tasks = new Stack<Task>();
+	private Integer[] myDisabledTaskList;
 	
-	public Place(String name, Stack<Task> tasks){
+	public Place(String name, Stack<Task> tasks, Integer[] disabledTaskList){
 		super(name, "place");
 		this.tasks = tasks;
+		myDisabledTaskList = disabledTaskList;
+	}
+	
+	public Integer[] getDisabledTasks(){
+		return myDisabledTaskList;
 	}
 	
 	public Stack<Task> getTasks(){

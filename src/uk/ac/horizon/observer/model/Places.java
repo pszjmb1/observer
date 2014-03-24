@@ -95,16 +95,16 @@ public class Places {
 		main.add(new Task("Other"));
 		Stack<Task> empty = new Stack<Task>();
 
-		places.add(new Place("In Transit – Within Ward", main));
-		places.add(new Place("In Transit – Between Wards", main));
-		places.add(new Place("In Ward – Note Trolley", main));
-		places.add(new Place("In Ward – Office", main));
-		places.add(new Place("In Ward – Nurses Station", main));
-		places.add(new Place("In Ward – Stores", main));
+		places.add(new Place("In Transit – Within Ward", main, new Integer[]{0,1}));
+		places.add(new Place("In Transit – Between Wards", main, new Integer[]{2,3}));
+		places.add(new Place("In Ward – Note Trolley", main,new Integer[]{4,5,7}));
+		places.add(new Place("In Ward – Office", main, new Integer[]{}));
+		places.add(new Place("In Ward – Nurses Station", main, new Integer[]{0,2,4}));
+		places.add(new Place("In Ward – Stores", main, new Integer[]{}));
 		
-		places.add(new Place("With Patient – Open Ward", empty));
-		places.add(new Place("With Patient – Private Room", empty));
-		places.add(new Place("Lab / Pharmacy / etc. (Other)", empty));	
-		places.add(new Place("Café / Toilet / Mess", empty));
+		places.add(new Place("With Patient – Open Ward", empty, new Integer[]{}));
+		places.add(new Place("With Patient – Private Room", empty, new Integer[]{}));
+		places.add(new Place("Lab / Pharmacy / etc. (Other)", empty, new Integer[]{}));	
+		places.add(new Place("Café / Toilet / Mess", empty, new Integer[]{}));
 	}
 }
