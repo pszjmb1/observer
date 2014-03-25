@@ -95,12 +95,12 @@ public class Places {
 		main.add(new Task("Other"));
 		Stack<Task> empty = new Stack<Task>();
 
-		places.add(new Place("In Transit – Within Ward", main, new Integer[]{0,1}));
-		places.add(new Place("In Transit – Between Wards", main, new Integer[]{2,3}));
-		places.add(new Place("In Ward – Note Trolley", main,new Integer[]{4,5,7}));
-		places.add(new Place("In Ward – Office", main, new Integer[]{}));
-		places.add(new Place("In Ward – Nurses Station", main, new Integer[]{0,2,4}));
-		places.add(new Place("In Ward – Stores", main, new Integer[]{}));
+		places.add(new Place("In Transit – Within Ward", main, new Integer[]{2,3,6,8}));
+		places.add(new Place("In Transit – Between Wards", main, new Integer[]{2,3,6,8,18}));
+		places.add(new Place("In Ward – Note Trolley", main,new Integer[]{2,3,6,8,14,15,16,18}));
+		places.add(new Place("In Ward – Office", main, new Integer[]{18}));
+		places.add(new Place("In Ward – Nurses Station", main, new Integer[]{18}));
+		places.add(new Place("In Ward – Stores", main, new Integer[]{18}));
 		
 		places.add(new Place("With Patient – Open Ward", empty, new Integer[]{}));
 		places.add(new Place("With Patient – Private Room", empty, new Integer[]{}));
