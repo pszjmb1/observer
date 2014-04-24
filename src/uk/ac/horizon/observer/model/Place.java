@@ -14,7 +14,8 @@ public class Place extends Observation {
 	public Place(String name, Stack<Task> tasks, Integer[] disabledTaskList){
 		super(name, "place");
 		this.tasks = tasks;
-		myDisabledTaskList = disabledTaskList;
+											 // This is commented out to prevent greying out.
+		myDisabledTaskList = new Integer[]{};//disabledTaskList;
 	}
 	
 	public Integer[] getDisabledTasks(){

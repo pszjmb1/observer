@@ -73,26 +73,29 @@ public class Places {
 		main.add(new Task("Talking Face-to-face"));
 		main.add(new Task("Talking on Landline -- to Registrar"));
 		main.add(new Task("Talking on Landline -- to Other"));
-		main.add(new Task("Talking on Blackberry -- to Registrar"));
-		main.add(new Task("Talking on Blackberry -- to Other"));
-		main.add(new Task("Using Landline"));
-		main.add(new Task("Using Blackberry"));
+		main.add(new Task("Talking on Smartphone -- to Registrar"));
+		main.add(new Task("Talking on Smartphone -- to Other"));
+		main.add(new Task("Using Landline / on hold"));
+		main.add(new Task("Using Smartphone"));
 		main.add(new Task("Using PC/Computer on Wheels (COW)"));
 		main.add(new Task("Looking at Notes"));
 		main.add(new Task("Writing on Notes"));
 		main.add(new Task("Adjusting Notes"));
+		main.add(new Task("Labelling"));
 		main.add(new Task("Reviewing Research Materials"));
 		main.add(new Task("Searching for Paperwork"));
 		main.add(new Task("Searching for a Patient"));
 		main.add(new Task("Searching for a Staff Member"));
+		main.add(new Task("Searching through Bag"));
 		main.add(new Task("Searching for Equipment"));
+		main.add(new Task("Using Equipment Away from Patient"));
 		main.add(new Task("Putting Things Away"));
 		main.add(new Task("Point of Care Testing (PoCT)"));
 		main.add(new Task("Getting Dressed/Putting on Protective Clothing"));
+		main.add(new Task("Interrupted"));
 		main.add(new Task("No Observable Task -- Thinking"));
 		main.add(new Task("No Observable Task -- Downtime"));
-		main.add(new Task("Interrupted"));
-		main.add(new Task("Other"));
+		//main.add(new Task("Other"));
 		Stack<Task> empty = new Stack<Task>();
 
 		places.add(new Place("In Transit – Within Ward", main, new Integer[]{2,3,6,8}));
@@ -101,10 +104,11 @@ public class Places {
 		places.add(new Place("In Ward – Office", main, new Integer[]{18}));
 		places.add(new Place("In Ward – Nurses Station", main, new Integer[]{18}));
 		places.add(new Place("In Ward – Stores", main, new Integer[]{18}));
+		places.add(new Place("Café / Mess", main, new Integer[]{}));
 		
 		places.add(new Place("With Patient – Open Ward", empty, new Integer[]{}));
 		places.add(new Place("With Patient – Private Room", empty, new Integer[]{}));
 		places.add(new Place("Lab / Pharmacy / etc. (Other)", empty, new Integer[]{}));	
-		places.add(new Place("Café / Toilet / Mess", empty, new Integer[]{}));
+		places.add(new Place("Unobservable", empty, new Integer[]{}));
 	}
 }
