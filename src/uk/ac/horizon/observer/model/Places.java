@@ -75,6 +75,7 @@ public class Places {
 		main.add(new Task("Talking on Landline -- to Other"));
 		main.add(new Task("Talking on Smartphone -- to Registrar"));
 		main.add(new Task("Talking on Smartphone -- to Other"));
+		main.add(new Task("Interrupted"));
 		main.add(new Task("Using Landline / on hold"));
 		main.add(new Task("Using Smartphone"));
 		main.add(new Task("Using PC/Computer on Wheels (COW)"));
@@ -85,14 +86,15 @@ public class Places {
 		main.add(new Task("Reviewing Research Materials"));
 		main.add(new Task("Searching for Paperwork"));
 		main.add(new Task("Searching for a Patient"));
+		main.add(new Task("Searching for Place"));
 		main.add(new Task("Searching for a Staff Member"));
 		main.add(new Task("Searching through Bag"));
 		main.add(new Task("Searching for Equipment"));
-		main.add(new Task("Using Equipment Away from Patient"));
+		main.add(new Task("Preparing/Using Equipment Away from Patient"));
 		main.add(new Task("Putting Things Away"));
 		main.add(new Task("Point of Care Testing (PoCT)"));
+		main.add(new Task("Washing Hands"));
 		main.add(new Task("Getting Dressed/Putting on Protective Clothing"));
-		main.add(new Task("Interrupted"));
 		main.add(new Task("No Observable Task -- Thinking"));
 		main.add(new Task("No Observable Task -- Downtime"));
 		//main.add(new Task("Other"));
