@@ -75,9 +75,12 @@ public class Places {
 		main.add(new Task("Talking on Landline -- to Other"));
 		main.add(new Task("Talking on Smartphone -- to Registrar"));
 		main.add(new Task("Talking on Smartphone -- to Other"));
+		main.add(new Task("Talking on Smartphone -- to Switchboard"));
 		main.add(new Task("Interrupted"));
 		main.add(new Task("Using Landline / on hold"));
 		main.add(new Task("Using Smartphone"));
+		main.add(new Task("Searching for clinical information on internet/ intranet"));
+		main.add(new Task("Searching for non-clinical information on internet/intranet"));
 		main.add(new Task("Using PC/Computer on Wheels (COW)"));
 		main.add(new Task("Looking at Notes"));
 		main.add(new Task("Writing on Notes"));
@@ -106,6 +109,8 @@ public class Places {
 		places.add(new Place("In Ward – Office", main, new Integer[]{18}));
 		places.add(new Place("In Ward – Nurses Station", main, new Integer[]{18}));
 		places.add(new Place("In Ward – Stores", main, new Integer[]{18}));
+		places.add(new Place("In Ward – Clean utility", main, new Integer[]{18}));
+		places.add(new Place("In Ward – Dirty utility", main, new Integer[]{18}));
 		places.add(new Place("Café / Mess", main, new Integer[]{}));
 		
 		places.add(new Place("With Patient – Open Ward", empty, new Integer[]{}));
