@@ -103,18 +103,19 @@ public class Places {
 		//main.add(new Task("Other"));
 		Stack<Task> empty = new Stack<Task>();
 
-		places.add(new Place("In Transit – Within Ward", main, new Integer[]{2,3,6,8}));
-		places.add(new Place("In Transit – Between Wards", main, new Integer[]{2,3,6,8,18}));
-		places.add(new Place("In Ward – Note Trolley", main,new Integer[]{2,3,6,8,14,15,16,18}));
-		places.add(new Place("In Ward – Office", main, new Integer[]{18}));
-		places.add(new Place("In Ward – Nurses Station", main, new Integer[]{18}));
-		places.add(new Place("In Ward – Stores", main, new Integer[]{18}));
-		places.add(new Place("In Ward – Clean utility", main, new Integer[]{18}));
-		places.add(new Place("In Ward – Dirty utility", main, new Integer[]{18}));
-		places.add(new Place("Café / Mess", main, new Integer[]{}));
+		places.add(new Place("In Transit â€“ Within Ward", main, new Integer[]{2,3,6,8}));
+		places.add(new Place("In Transit â€“ Between Wards", main, new Integer[]{2,3,6,8,18}));
+		places.add(new Place("In Ward â€“ Note Trolley", main,new Integer[]{2,3,6,8,14,15,16,18}));
+		places.add(new Place("In Ward â€“ Office", main, new Integer[]{18}));
+		places.add(new Place("In Ward â€“ Nurses Station", main, new Integer[]{18}));
+		places.add(new Place("In Ward â€“ Stores", main, new Integer[]{18}));
+		places.add(new Place("In Ward â€“ Clean utility", main, new Integer[]{18}));
+		places.add(new Place("In Ward â€“ Dirty utility", main, new Integer[]{18}));
+		places.add(new Place("With Patient â€“ Open Ward", main, new Integer[]{}));
+		places.add(new Place("With Patient â€“ Private Room", main, new Integer[]{}));
+		places.add(new Place("Cafe / Mess", main, new Integer[]{}));	
+		places.add(new Place("Kitchen", main, new Integer[]{}));	
 		
-		places.add(new Place("With Patient – Open Ward", empty, new Integer[]{}));
-		places.add(new Place("With Patient – Private Room", empty, new Integer[]{}));
 		places.add(new Place("Lab / Pharmacy / etc. (Other)", empty, new Integer[]{}));	
 		places.add(new Place("Unobservable", empty, new Integer[]{}));
 	}
